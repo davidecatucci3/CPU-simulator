@@ -8,8 +8,8 @@ data_memory = {hex(i): bin(0).zfill(word_lenght)[:word_lenght - 2]  for i in ran
 c = 0
 SP = hex(c)
 
-# check errors in asm code
-def check_code_error(instr):
+# check errors (ADD and SUB) in asm code
+def check_op_error(instr):
     register_pattern = r'r([0-9]|1[0-3])'
 
     if not re.findall(register_pattern, instr[2]):
@@ -21,7 +21,7 @@ def check_code_error(instr):
 def asm_to_bin(instr):
     if instr[0] == 'ADD' or instr[0] == 'SUB':
         # check asm error coding
-        if check_code_error(instr):
+        if check_op_error(instr):
             cond = '1110'
             op = '00'
 
@@ -48,6 +48,10 @@ def asm_to_bin(instr):
                 Src2 = rot + imm8
         
             res = cond + op + funct + Rn + Rd + Src2
+        else:
+            print('Error: ASM (op) code is wrong')
+
+            return 0
     elif instr[0] == 'LDR':
         pass
     elif instr[0] == 'STR':
@@ -71,9 +75,9 @@ def load_memory(instr):
         c += 1
 
         SP = hex(c)
-
+    
 # read instruction and load in memory
-def read_instr():
+def load_instr():
     instrs = []
 
     # read asm code
@@ -87,5 +91,3 @@ def read_instr():
     for instr in instrs:
         load_memory(instr)
 
-
-read_instr()
