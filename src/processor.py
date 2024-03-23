@@ -1,6 +1,7 @@
 from instruction_memory import instruction_memory
 from register_file import register_file
 from data_memory import load_instr
+from building_blocks import ALU
 
 # global variables
 PC = hex(0)
@@ -8,16 +9,20 @@ PC = hex(0)
 # load instruction in memory
 load_instr()
 
-# fetch
-instr = instruction_memory(PC)
+for i in range(1, 4):
+    # fetch
+    instr = instruction_memory(PC)
 
-PC += 1
+    PC = hex(i)
 
-# decode
-SrcA, SrcB = register_file(instr)
+    # decode
+    SrcA, SrcB, cmd = register_file(instr)
 
-# execute
+    # execute
+    res = ALU(SrcA, SrcB, cmd)
 
-# memory
+    print(int(res, 2))
 
-# write back
+    # memory
+
+    # write back

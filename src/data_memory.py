@@ -29,25 +29,22 @@ def asm_to_bin(instr):
             i = '0' if instr[3][0] == 'r' else '1'
             cmd = '0100' if instr[0] == 'ADD' else '0010'
             s = '0'
-            funct = i + cmd + s
 
             Rn = bin(int(instr[2][1:])).zfill(4)
             Rd = bin(int(instr[1][1:])).zfill(4)
-
+        
             # Src2
             if i == '0':
                 shamt5 = '00000'
                 sh = '000'
                 Rm = bin(int(instr[3][1:])).zfill(4)
 
-                Src2 = shamt5 + sh + Rm
+                list_instr = [cond, op, i, cmd, s, Rn, Rd, shamt5, sh, Rm]
             else:
                 rot = '0'.zfill(4)
                 imm8 = bin(int(instr[3])).zfill(8)
 
-                Src2 = rot + imm8
-        
-            res = cond + op + funct + Rn + Rd + Src2
+                list_instr = [cond, op, i, cmd, s, Rn, Rd, rot, imm8]
         else:
             print('Error: ASM (op) code is wrong')
 
@@ -61,7 +58,7 @@ def asm_to_bin(instr):
 
         return 0
 
-    return res
+    return list_instr
 
 # convert instruction in binary format and load in memory
 def load_memory(instr):
