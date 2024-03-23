@@ -16,7 +16,17 @@ pc = config['Registers']['PC']
 
 # reset processor
 def reset():
-    pass
+    # set registers to 0
+    for i in range(13):
+        config.set('Registers', f'r{i}', '0x0000000000')
+    
+    for i in ['sp', 'lr', 'pc']:
+        config.set('Registers', i, '0x0000000000')
+
+    with open('src/config.ini', 'w') as configfile:
+        config.write(configfile)
+
+    # clear data memory
 
 # load instruction in memory
 load_instr()
