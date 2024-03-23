@@ -75,10 +75,32 @@ def asm_to_bin(instr):
             print('Error: ASM (op) code is wrong')
 
             return 0
-    elif instr[0] == 'LDR':
-        pass
-    elif instr[0] == 'STR':
-        pass
+    elif instr[0] == 'LDR' or instr[0] == 'STR':
+        cond = '1110'
+        op = '01'
+   
+        # funct
+        i = '0' if instr[2][0] != 'r' else '1'
+        p = '1'
+        u = '0'
+        b = '0'
+        w = '0'
+        l = '0'
+ 
+        Rn = bin(int(instr[2][2:])).zfill(4)
+        Rd = bin(int(instr[1][1:])).zfill(4)
+
+        # Src2
+        if i == '0':
+            imm12 = bin(int(instr[3][:-1])).zfill(12)
+
+            list_instr = [cond, op, i, p, u, b, w, l, Rn, Rd, imm12]
+        else:
+            shamt5 = '00000'
+            sh = '00'
+            Rm = bin(int(instr[2][2:])).zfill(4)
+
+            list_instr = [cond, op, i, p, u, b, w, l, Rn, Rd, shamt5, sh, '1', Rm]
     else:
         print('Error: Instruction not recognized')
 
@@ -118,4 +140,3 @@ def load_instr():
     # load in memory
     for instr in instrs:
         load_memory(instr)
-

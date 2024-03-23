@@ -36,12 +36,12 @@ def reset():
 load_instr()
 
 # execute instructions
-for i in range(1, 4):
+for i in range(1, 2):
     print(f'Cycle {i}')
-
+    
     # fetch
     instr = instruction_memory(pc)
-
+    
     pc = '0x' + struct.pack('>I', i).hex().zfill(register_lenght)
 
     config.set('Registers', 'PC', pc)
@@ -57,7 +57,7 @@ for i in range(1, 4):
   
     # memory
     write_data(alu_res)
-
+    
     # write back
     write_back(alu_res, Rd)
 

@@ -34,8 +34,29 @@ def register_file(instr):
         else:
             pass
     elif op == '01':
-        pass
+        i = instr[2]
+
+        cmd = '0100'
+
+        if i == '0':
+            idx_Rd = instr[9].index('b')
+
+            Rd = int(instr[9][idx_Rd + 1:], 2)
+
+            SrcA = int(registers[f'r{Rd}'], 16)       
+
+            idx_Rm = instr[-1].index('b')
+            Rm = int(instr[-1][idx_Rm + 1:], 2)
+
+            SrcB = Rm
+
+            Rd = f'r{int(instr[9][idx_Rd + 1:], 2)}'
+        else:
+            pass
     else:
         pass
 
     return SrcA, SrcB, cmd, Rd
+
+    
+
