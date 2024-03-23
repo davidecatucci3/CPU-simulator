@@ -48,7 +48,7 @@ def asm_to_bin(instr):
 
             Rn = bin(int(instr[2][1:])).zfill(4)
             Rd = bin(int(instr[1][1:])).zfill(4)
-        
+
             # Src2
             if i == '0':
                 shamt5 = '00000'

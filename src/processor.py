@@ -14,10 +14,14 @@ config.read('src/config.ini')
 word_lenght = int(config['CPU settings']['word_lenght'])
 pc = config['Registers']['PC']
 
+# reset processor
+def reset():
+    pass
+
 # load instruction in memory
 load_instr()
 
-for i in range(1, 2):
+for i in range(1, 3):
     # fetch
     instr = instruction_memory(pc)
 
@@ -32,10 +36,11 @@ for i in range(1, 2):
     SrcA, SrcB, cmd, Rd = register_file(instr)
 
     # execute
-    res = ALU(SrcA, SrcB, cmd)
+    alu_res = ALU(SrcA, SrcB, cmd)
   
     # memory
-    write_data(res)
+    write_data(alu_res)
 
     # write back
-    write_back(res, Rd)
+    write_back(alu_res, Rd)
+
