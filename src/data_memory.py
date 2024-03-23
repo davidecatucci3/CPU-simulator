@@ -1,5 +1,7 @@
 import re
 
+from register_file import registers
+
 word_lenght = 32
 size = 50 # units (not unit of measure)
 
@@ -16,6 +18,14 @@ def check_op_error(instr):
         return False
 
     return True
+
+# write res back in register
+def write_back(alu_res, Rd):
+    registers[Rd] = alu_res
+
+# write res in memory
+def write_data(alu_res):
+    pass
 
 # convert asm code in binary code
 def asm_to_bin(instr):

@@ -6,6 +6,6 @@ def ALU(SrcA, SrcB, cmd):
     elif cmd == '0010':
         res = SrcA - SrcB
    
-    bin_res = bin(res)
+    bin_res = bin(res).zfill(32)
 
     return bin_res

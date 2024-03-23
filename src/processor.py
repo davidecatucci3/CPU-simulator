@@ -1,6 +1,6 @@
+from data_memory import load_instr, write_data, write_back
 from instruction_memory import instruction_memory
-from register_file import register_file
-from data_memory import load_instr
+from register_file import register_file, registers
 from building_blocks import ALU
 
 # global variables
@@ -16,13 +16,15 @@ for i in range(1, 4):
     pc = hex(i)
 
     # decode
-    SrcA, SrcB, cmd = register_file(instr)
+    SrcA, SrcB, cmd, Rd = register_file(instr)
 
     # execute
     res = ALU(SrcA, SrcB, cmd)
-
-    print(int(res, 2))
-
+  
     # memory
+    write_data(res)
 
     # write back
+    write_back(res, Rd)
+
+    print(registers)
