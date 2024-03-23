@@ -4,16 +4,16 @@ from data_memory import load_instr
 from building_blocks import ALU
 
 # global variables
-PC = hex(0)
+pc = hex(0)
 
 # load instruction in memory
 load_instr()
 
 for i in range(1, 4):
     # fetch
-    instr = instruction_memory(PC)
+    instr = instruction_memory(pc)
 
-    PC = hex(i)
+    pc = hex(i)
 
     # decode
     SrcA, SrcB, cmd = register_file(instr)

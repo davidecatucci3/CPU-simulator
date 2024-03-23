@@ -6,7 +6,7 @@ size = 50 # units (not unit of measure)
 data_memory = {hex(i): bin(0).zfill(word_lenght)[:word_lenght - 2]  for i in range(size)} # memory stack
 
 c = 0
-SP = hex(c)
+sp = hex(c)
 
 # check errors (ADD and SUB) in asm code
 def check_op_error(instr):
@@ -65,13 +65,13 @@ def load_memory(instr):
     bin_data = asm_to_bin(instr)
 
     if not 0:
-        global c, SP
+        global c, sp
 
-        data_memory[SP] = bin_data
+        data_memory[sp] = bin_data
 
         c += 1
 
-        SP = hex(c)
+        sp = hex(c)
     
 # read instruction and load in memory
 def load_instr():

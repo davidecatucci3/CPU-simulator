@@ -25,4 +25,6 @@ def register_file(instr):
     else:
         pass
 
+
+
     return SrcA, SrcB, cmd
