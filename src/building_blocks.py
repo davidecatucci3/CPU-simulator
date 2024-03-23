@@ -1,11 +1,14 @@
 import configparser
 
+# read config.ini
 config = configparser.ConfigParser()
 
 config.read('src/config.ini')
 
+# global variables
 word_lenght = int(config['CPU settings']['word_lenght'])
 
+# ALU
 def ALU(SrcA, SrcB, cmd):
     res = None
  

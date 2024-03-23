@@ -1,9 +1,11 @@
 import configparser
 
+# read config.ini
 config = configparser.ConfigParser()
 
 config.read('src/config.ini')
 
+# global variables
 word_lenght = int(config['CPU settings']['word_lenght'])
 
 registers = config['Registers']
@@ -25,7 +27,7 @@ def register_file(instr):
             i = instr[2]
 
             idx_SrcB = instr[-1].index('b')
-            SrcB = int(registers[f'r{int(instr[-1][idx_SrcB + 1:], 2)}'], 2) if i == '0' else int(instr[-1][idx_SrcB + 1:], 2)
+            SrcB = int(registers[f'r{int(instr[-1][idx_SrcB + 1:], 2)}'], 16) if i == '0' else int(instr[-1][idx_SrcB + 1:], 2)
 
             idx_Rd = instr[6].index('b')
             Rd = f'r{int(instr[6][idx_Rd + 1:], 2)}'
