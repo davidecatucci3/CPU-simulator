@@ -14,16 +14,17 @@ config.read('src/config.ini')
 
 # global variables
 word_lenght = int(config['CPU settings']['word_lenght'])
+register_lenght = int(config['CPU settings']['register_lenght'])
 pc = config['Registers']['PC']
 
 # reset processor
 def reset():
     # set registers to 0
     for i in range(13):
-        config.set('Registers', f'r{i}', '0x0000000000')
+        config.set('Registers', f'r{i}', '0x00000000')
     
     for i in ['sp', 'lr', 'pc']:
-        config.set('Registers', i, '0x0000000000')
+        config.set('Registers', i, '0x00000000')
 
     with open('src/config.ini', 'w') as configfile:
         config.write(configfile)
@@ -41,7 +42,7 @@ for i in range(1, 4):
     # fetch
     instr = instruction_memory(pc)
 
-    pc = '0x' + struct.pack('>I', i).hex().zfill(10)
+    pc = '0x' + struct.pack('>I', i).hex().zfill(register_lenght)
 
     config.set('Registers', 'PC', pc)
 

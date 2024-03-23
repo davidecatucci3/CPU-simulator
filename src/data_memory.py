@@ -2,8 +2,6 @@ import configparser
 import struct
 import re
 
-from register_file import registers
-
 # read config.ini
 config = configparser.ConfigParser()
 
@@ -11,9 +9,10 @@ config.read('src/config.ini')
 
 # global variables
 word_lenght = int(config['CPU settings']['word_lenght'])
+register_lenght = int(config['CPU settings']['register_lenght'])
 size = 50 # units (not unit of measure)
 
-data_memory = {'0x' + struct.pack('>I', i).hex().zfill(10): hex(0).zfill(word_lenght)[:word_lenght - 2]  for i in range(size)} # memory stack
+data_memory = {'0x' + struct.pack('>I', i).hex().zfill(register_lenght): hex(0).zfill(word_lenght)[:word_lenght - 2]  for i in range(size)} # memory stack
 
 c = 0
 sp = config['Registers']['SP']
@@ -22,7 +21,7 @@ sp = config['Registers']['SP']
 def clear_memory():
     global data_memory
     
-    data_memory = {'0x' + struct.pack('>I', i).hex().zfill(10): hex(0).zfill(word_lenght)[:word_lenght - 2]  for i in range(size)} # memory stack
+    data_memory = {'0x' + struct.pack('>I', i).hex().zfill(register_lenght): hex(0).zfill(word_lenght)[:word_lenght - 2]  for i in range(size)} # memory stack
 
 # check errors (ADD and SUB) in asm code
 def check_op_error(instr):
@@ -35,7 +34,10 @@ def check_op_error(instr):
 
 # write res back in register
 def write_back(alu_res, Rd):
-    registers[Rd] = alu_res
+    config.set('Registers', Rd, alu_res)
+
+    with open('src/config.ini', 'w') as config_file:
+        config.write(config_file)
 
 # write res in memory
 def write_data(alu_res):
@@ -95,7 +97,7 @@ def load_memory(instr):
 
         c += 1
 
-        sp = '0x' + struct.pack('>I', c).hex().zfill(10)
+        sp = '0x' + struct.pack('>I', c).hex().zfill(register_lenght)
 
         config.set('Registers', 'SP', sp)
 
