@@ -1,14 +1,20 @@
+import configparser
+import struct
 import re
 
 from register_file import registers
 
-word_lenght = 32
+config = configparser.ConfigParser()
+
+config.read('src/config.ini')
+
+word_lenght = int(config['CPU settings']['word_lenght'])
 size = 50 # units (not unit of measure)
 
-data_memory = {hex(i): bin(0).zfill(word_lenght)[:word_lenght - 2]  for i in range(size)} # memory stack
+data_memory = {'0x' + struct.pack('>I', i).hex().zfill(10): hex(0).zfill(word_lenght)[:word_lenght - 2]  for i in range(size)} # memory stack
 
 c = 0
-sp = hex(c)
+sp = config['Registers']['SP']
 
 # check errors (ADD and SUB) in asm code
 def check_op_error(instr):
@@ -81,7 +87,12 @@ def load_memory(instr):
 
         c += 1
 
-        sp = hex(c)
+        sp = '0x' + struct.pack('>I', c).hex().zfill(10)
+
+        config.set('Registers', 'SP', sp)
+
+        with open('src/config.ini', 'w') as configfile:
+            config.write(configfile)
     
 # read instruction and load in memory
 def load_instr():

@@ -1,4 +1,12 @@
-registers = {f'r{i}': '0'.zfill(32) for i in range(0, 14)}
+import configparser
+
+config = configparser.ConfigParser()
+
+config.read('src/config.ini')
+
+word_lenght = int(config['CPU settings']['word_lenght'])
+
+registers = {f'r{i}': '0'.zfill(word_lenght) for i in range(0, 16)}
 
 def register_file(instr):
     SrcA = None
@@ -12,7 +20,6 @@ def register_file(instr):
         if cmd == '0100' or cmd == '0010':
             idx_SrcA = instr[5].index('b')
             SrcA = int(instr[5][idx_SrcA + 1:], 2)
-            print(registers[f'r{SrcA}'])
 
             if 'b' in registers[f'r{SrcA}']:
                 idx_rx = registers[f'r{SrcA}'].index('b')
