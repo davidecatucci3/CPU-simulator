@@ -1,7 +1,12 @@
-ADD: addition -> ADD a, b, c (not immediate)
-SUB: subtraction -> SUB a, b, c (not immediate)
-STR: store in data-memory -> STR a, b, c (not immediate)
-LDR: load from data-memory -> LDR a, b, c (not immediate)
+ADD: addition -> ADD Rd, Rn, Rm
+SUB: subtraction -> SUB Rd, Rn, Rm 
+STR: store in data memory -> STR Rd, [Rn, Rm]
+LDR: load from data memory -> LDR Rd, [Rn, Rm]
 
 ADD, SUB: cond(4) - op(2) - funct(6)(I(0) - cmd(4) - S(0)) - Rn(4) - Rd(4) - Src2(12)
-STR, LDR: cond(4) - op(2) - funct(6)(I(1)) - Rn(4) - Rd(4) - Src2(12)
+                                                                                - I=1 (rot(4) - imm8(8))
+                                                                                - I=0 (shamt5(5) - sh(2) - 0 - Rm(4))
+
+STR, LDR: cond(4) - op(2) - funct(6)(I-(1) - P(1) - U(1) - B(1) - W(1) - L(1)) - Rn(4) - Rd(4) - Src2(12)
+                                                                                                    - I-=1 (shamt5(5) - sh(2) - 1 - Rm(4))
+                                                                                                    - I-=0 (imm2(12))

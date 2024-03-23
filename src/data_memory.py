@@ -36,10 +36,10 @@ def asm_to_bin(instr):
             # Src2
             if i == '0':
                 shamt5 = '00000'
-                sh = '000'
+                sh = '00'
                 Rm = bin(int(instr[3][1:])).zfill(4)
 
-                list_instr = [cond, op, i, cmd, s, Rn, Rd, shamt5, sh, Rm]
+                list_instr = [cond, op, i, cmd, s, Rn, Rd, shamt5, sh, '0', Rm]
             else:
                 rot = '0'.zfill(4)
                 imm8 = bin(int(instr[3])).zfill(8)
