@@ -2,6 +2,7 @@ ADD: addition -> ADD Rd, Rn, Rm
 SUB: subtraction -> SUB Rd, Rn, Rm 
 STR: store in data memory -> STR Rd, [Rn, Rm]
 LDR: load from data memory -> LDR Rd, [Rn, Rm]
+MOV: copies the value of Operand2 in Rd -> MOV Rd, Operand2
 
 ADD, SUB: cond(4) - op(2) - funct(6)(I(0) - cmd(4) - S(0)) - Rn(4) - Rd(4) - Src2(12)
                                                                                 - I=1 (rot(4) - imm8(8))
