@@ -78,7 +78,7 @@ def asm_to_bin(instr):
     elif instr[0] == 'LDR' or instr[0] == 'STR':
         cond = '1110'
         op = '01'
-        print(instr)
+
         # funct
         i = '0' if 'r' not in instr[3] else '1'
         p = '1'
@@ -98,7 +98,7 @@ def asm_to_bin(instr):
         else:
             shamt5 = '00000'
             sh = '00'
-            Rm = bin(int(instr[2][2:])).zfill(4)
+            Rm = bin(int(instr[3][1:-1])).zfill(4)
 
             list_instr = [cond, op, i, p, u, b, w, l, Rn, Rd, shamt5, sh, '1', Rm]
     else:

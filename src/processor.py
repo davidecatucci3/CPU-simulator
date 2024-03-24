@@ -56,7 +56,7 @@ for i in range(1, 3):
 
     # execute
     alu_res = ALU(SrcA, SrcB, cmd)
-  
+
     # memory
     write_data(alu_res)
 
