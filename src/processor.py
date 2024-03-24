@@ -5,6 +5,7 @@ import time
 from data_memory import load_instr, write_data, write_back, clear_memory
 from instruction_memory import instruction_memory
 from register_file import register_file
+from control_unit import control_unit
 from building_blocks import ALU
 
 # read config.ini
@@ -16,7 +17,6 @@ config.read('src/config.ini')
 word_lenght = int(config['CPU settings']['word_lenght'])
 register_lenght = int(config['CPU settings']['register_lenght'])
 num_low_register = int(config['CPU settings']['num_low_register'])
-pc = config['Registers']['PC']
 
 # reset processor
 def reset():
@@ -41,20 +41,30 @@ for i in range(1, 50):
     print(f'Cycle {i}')
     
     # fetch
+    pc = config['Registers']['PC']
+
     instr = instruction_memory(pc)
 
-    pc = '0x' + struct.pack('>I', i).hex().zfill(register_lenght)
+    new_pc = '0x' + struct.pack('>I', i).hex().zfill(register_lenght)
 
-    config.set('Registers', 'PC', pc)
+    config.set('Registers', 'PC', new_pc)
 
     with open('src/config.ini', 'w') as config_file:
         config.write(config_file)
 
-    if instr == '000000000000000000000000000000':
+    if instr == '000000000000000000000000000000': # check if there is another instruction in memory 
         break
 
     # decode
     SrcA, SrcB, cmd, Rd = register_file(instr)
+
+    # send data to control unit
+    cond = instr[0]
+    op = instr[1]
+    funct = instr
+    Rd = instr
+
+    control_unit(cond, op, funct, Rd)
 
     # execute
     alu_res = ALU(SrcA, SrcB, cmd)
