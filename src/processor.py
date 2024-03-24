@@ -16,6 +16,7 @@ config.read('src/config.ini')
 word_lenght = int(config['CPU settings']['word_lenght'])
 register_lenght = int(config['CPU settings']['register_lenght'])
 num_low_register = int(config['CPU settings']['num_low_register'])
+pc = config['Registers']['PC']
 
 # reset processor
 def reset():
@@ -36,20 +37,21 @@ def reset():
 load_instr()
 
 # execute instructions
-for i in range(1, 3):
+for i in range(1, 50):
     print(f'Cycle {i}')
     
     # fetch
-    pc = config['Registers']['PC']
-    
     instr = instruction_memory(pc)
-    
-    new_pc = '0x' + struct.pack('>I', i).hex().zfill(register_lenght)
 
-    config.set('Registers', 'PC', new_pc)
+    pc = '0x' + struct.pack('>I', i).hex().zfill(register_lenght)
+
+    config.set('Registers', 'PC', pc)
 
     with open('src/config.ini', 'w') as config_file:
         config.write(config_file)
+
+    if instr == '000000000000000000000000000000':
+        break
 
     # decode
     SrcA, SrcB, cmd, Rd = register_file(instr)
@@ -64,4 +66,3 @@ for i in range(1, 3):
     write_back(alu_res, Rd)
 
     time.sleep(2)
-

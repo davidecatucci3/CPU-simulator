@@ -50,7 +50,7 @@ def asm_to_bin(instr):
         if check_op_error(instr):
             cond = '1110'
             op = '00'
-
+    
             # funct
             i = '0' if instr[3][0] == 'r' else '1'
             cmd = '0100' if instr[0] == 'ADD' else '0010'

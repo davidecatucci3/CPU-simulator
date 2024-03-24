@@ -51,12 +51,12 @@ def register_file(instr):
         else:
             idx_Rn = instr[8].index('b')
             Rn = int(instr[8][idx_Rn + 1:], 2)
-            print(Rn)
+   
             SrcA = int(registers[f'r{Rn}'], 16)       
 
             idx_Rm = instr[-1].index('b')
             Rm = int(instr[-1][idx_Rm + 1:], 2)
-            print(Rm)
+   
             SrcB = int(registers[f'r{Rm}'], 16)       
 
             idx_Rd = instr[9].index('b')
