@@ -34,7 +34,7 @@ def register_file(instr):
         i = instr[2]
 
         cmd = '0100'
-        
+
         if i == '0':
             idx_Rn = instr[8].index('b')
             Rn = int(instr[8][idx_Rn + 1:], 2)

@@ -78,9 +78,9 @@ def asm_to_bin(instr):
     elif instr[0] == 'LDR' or instr[0] == 'STR':
         cond = '1110'
         op = '01'
-    
+        print(instr)
         # funct
-        i = '0' if instr[2][1] != 'r' else '1'
+        i = '0' if 'r' not in instr[3] else '1'
         p = '1'
         u = '0'
         b = '0'

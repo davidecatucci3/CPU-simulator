@@ -59,7 +59,7 @@ for i in range(1, 3):
   
     # memory
     write_data(alu_res)
-    
+
     # write back
     write_back(alu_res, Rd)
 

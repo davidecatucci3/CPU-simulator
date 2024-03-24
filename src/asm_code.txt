@@ -1,2 +1,2 @@
-LDR r0 [r0 2]
-STR r1 [r1 4]
+LDR r4 [r0 r1]
+STR r5 [r1 r3]
