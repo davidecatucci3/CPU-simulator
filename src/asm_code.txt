@@ -1,2 +1,2 @@
-MOV r0 3
-MOV r0 r1
+MOV r4 3
+MOV r6 r4

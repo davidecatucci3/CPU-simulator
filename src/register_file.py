@@ -1,4 +1,5 @@
 import configparser
+import struct
 
 # read config.ini
 config = configparser.ConfigParser()
@@ -19,6 +20,8 @@ def register_file(instr):
     if op == '00':
         cmd = instr[3]
 
+        Operand2 = None
+
         idx_Rn = instr[5].index('b')
         Rn = int(instr[5][idx_Rn + 1:], 2)
         SrcA = int(registers[f'r{Rn}'], 16)           
@@ -32,6 +35,8 @@ def register_file(instr):
         Rd = f'r{int(instr[6][idx_Rd + 1:], 2)}'
     elif op == '01':
         i = instr[2]
+
+        Operand2 = None
 
         cmd = '0100'
 
@@ -61,10 +66,31 @@ def register_file(instr):
 
             idx_Rd = instr[9].index('b')
             Rd = f'r{int(instr[9][idx_Rd + 1:], 2)}'
+    elif op == '10':
+        i = instr[2]
+        cmd = None
+        SrcA = None
+        SrcB = None
+
+        if i == '0':
+            idx_Rd = instr[3].index('b')
+            Rd = f'r{int(instr[3][idx_Rd + 1:], 2)}'
+
+            idx_Operand2 = instr[4].index('b')
+            Operand2 = f'{int(instr[4][idx_Operand2 + 1:], 2)}'
+
+            Operand2 = registers[f'r{Operand2}']
+        else:
+            idx_Rd = instr[3].index('b')
+            Rd = f'r{int(instr[3][idx_Rd + 1:], 2)}'
+
+            idx_Operand2 = instr[4].index('b')
+            Operand2 = int(instr[4][idx_Operand2 + 1:], 2)
+            Operand2 = '0x' + struct.pack('>I', Operand2).hex().zfill(8)
     else:
         print('Error: OpCode not recognize')
 
-    return SrcA, SrcB, cmd, Rd
+    return SrcA, SrcB, cmd, Rd, Operand2
 
     
 

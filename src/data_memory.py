@@ -34,7 +34,7 @@ def check_op_error(instr):
 
 # write res back in register
 def write_back(alu_res, Rd):
-    config.set('Registers', Rd, alu_res)
+    config.set('Registers', Rd, str(alu_res))
 
     with open('src/config.ini', 'w') as config_file:
         config.write(config_file)
@@ -112,16 +112,16 @@ def asm_to_bin(instr):
             Rd = bin(int(instr[1][1:])).zfill(4)
             Operand2 = bin(int(instr[2][1:])).zfill(4)
 
-            imm17 = bin(0).zfill(17)
+            imm16 = bin(0).zfill(16)
 
-            list_instr = [cond, op, Rd, Operand2, imm17]
+            list_instr = [cond, op, i, Rd, Operand2, imm16]
         else:
             Rd = bin(int(instr[1][1:])).zfill(4)
             Operand2 = bin(int(instr[2])).zfill(4)
 
-            imm17 = bin(0).zfill(17)
+            imm16 = bin(0).zfill(16)
 
-            list_instr = [cond, op, Rd, Operand2, imm17]
+            list_instr = [cond, op, i, Rd, Operand2, imm16]
     else:
         print('Error: Instruction not recognized')
 

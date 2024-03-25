@@ -37,42 +37,45 @@ def reset():
 load_instr()
 
 # execute instructions
-for i in range(1, 50):
-    print(f'Cycle {i}')
-    
+for i in range(0, 50):
     # fetch
     pc = config['Registers']['PC']
 
     instr = instruction_memory(pc)
 
-    new_pc = '0x' + struct.pack('>I', i).hex().zfill(register_lenght)
+    if instr == '000000000000000000000000000000': # check if there is another instruction in memory 
+        break
+
+    print(f'Cycle {i + 1}')
+
+    new_pc = '0x' + struct.pack('>I', i + 1).hex().zfill(register_lenght)
 
     config.set('Registers', 'PC', new_pc)
 
     with open('src/config.ini', 'w') as config_file:
         config.write(config_file)
 
-    if instr == '000000000000000000000000000000': # check if there is another instruction in memory 
-        break
-
     # decode
-    SrcA, SrcB, cmd, Rd = register_file(instr)
-
+    SrcA, SrcB, cmd, Rd, Operand2 = register_file(instr)
+  
     # send data to control unit
-    cond = instr[0]
-    op = instr[1]
-    funct = instr[2:5] if instr[1] == '00' else instr[2:8]
-    Rd = instr[6] if instr[1] == '00' else instr[9]
+    #cond = instr[0]
+    #op = instr[1]
+    #funct = instr[2:5] if instr[1] == '00' else instr[2:8]
+    #Rd = instr[6] if instr[1] == '00' else instr[9]
 
-    control_unit(cond, op, funct, Rd)
+    #control_unit(cond, op, funct, Rd)
 
     # execute
-    alu_res = ALU(SrcA, SrcB, cmd)
+    if SrcA != None and SrcB != None:
+        alu_res = ALU(SrcA, SrcB, cmd)
+    else:
+        alu_res = Operand2
 
     # memory
     write_data(alu_res)
-
+    print(alu_res, Rd)
     # write back
     write_back(alu_res, Rd)
-
+    
     time.sleep(2)
