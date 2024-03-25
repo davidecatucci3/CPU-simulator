@@ -101,6 +101,27 @@ def asm_to_bin(instr):
             Rm = bin(int(instr[3][1:-1])).zfill(4)
 
             list_instr = [cond, op, i, p, u, b, w, l, Rn, Rd, shamt5, sh, '1', Rm]
+    elif instr[0] == 'MOV':
+        cond = '1110'
+        op = '10'
+
+        # funct
+        i = '0' if instr[2][0] == 'r' else '1'
+
+        if i == '0':
+            Rd = bin(int(instr[1][1:])).zfill(4)
+            Operand2 = bin(int(instr[2][1:])).zfill(4)
+
+            imm17 = bin(0).zfill(17)
+
+            list_instr = [cond, op, Rd, Operand2, imm17]
+        else:
+            Rd = bin(int(instr[1][1:])).zfill(4)
+            Operand2 = bin(int(instr[2])).zfill(4)
+
+            imm17 = bin(0).zfill(17)
+
+            list_instr = [cond, op, Rd, Operand2, imm17]
     else:
         print('Error: Instruction not recognized')
 

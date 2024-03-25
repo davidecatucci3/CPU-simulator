@@ -1,2 +1,2 @@
 def control_unit(cond, op, funct, Rd):
-    pass
+    print(cond, op, funct, Rd)

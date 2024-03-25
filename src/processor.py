@@ -61,8 +61,8 @@ for i in range(1, 50):
     # send data to control unit
     cond = instr[0]
     op = instr[1]
-    funct = instr
-    Rd = instr
+    funct = instr[2:5] if instr[1] == '00' else instr[2:8]
+    Rd = instr[6] if instr[1] == '00' else instr[9]
 
     control_unit(cond, op, funct, Rd)
 
