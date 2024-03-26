@@ -57,10 +57,10 @@ def processor():
             config.write(config_file)
 
         # decode
-        SrcA, SrcB, cmd, Rd, Operand2 = register_file(instr)
+        SrcA, SrcB, cmd, Rd, Operand2, use_alu = register_file(instr)
 
         # execute
-        if SrcA != None and SrcB != None:
+        if use_alu:
             alu_res = ALU(SrcA, SrcB, cmd)
         else:
             alu_res = Operand2

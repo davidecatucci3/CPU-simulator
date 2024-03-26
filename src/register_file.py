@@ -14,13 +14,16 @@ registers = config['Registers']
 def register_file(instr):
     SrcA = None
     SrcB = None
+    cmd = None
+    Operand2 = None
+    use_alu = False
 
     op = instr[1]
 
     if op == '00': # ADD or SUB
-        cmd = instr[3]
+        use_alu = True
 
-        Operand2 = None
+        cmd = instr[3]
 
         Rn = int(instr[5], 2)
         SrcA = int(registers[f'r{Rn}'], 16)           
@@ -31,9 +34,9 @@ def register_file(instr):
 
         Rd = f'r{int(instr[6], 2)}'
     elif op == '01': # LDR or STR
-        i = instr[2]
+        use_alu = True
 
-        Operand2 = None
+        i = instr[2]
 
         cmd = '0100'
 
@@ -43,6 +46,7 @@ def register_file(instr):
             SrcA = int(registers[f'r{Rn}'], 16)       
 
             Rm = int(instr[-1], 2)
+
             SrcB = Rm
 
             Rd = f'r{int(instr[9], 2)}'
@@ -59,15 +63,10 @@ def register_file(instr):
     elif op == '10': # MOV
         i = instr[2]
 
-        cmd = None
-        SrcA = None
-        SrcB = None
-
         if i == '0':
             Rd = f'r{int(instr[3], 2)}'
 
             Operand2 = f'{int(instr[4], 2)}'
-
             Operand2 = registers[f'r{Operand2}']
         else:
             Rd = f'r{int(instr[3], 2)}'
@@ -75,9 +74,9 @@ def register_file(instr):
             Operand2 = int(instr[4], 2)
             Operand2 = '0x' + struct.pack('>I', Operand2).hex().zfill(8)
     else: # wrong op
-        print('Error: OpCode not recognize')
+        print('Error: op not recognized')
 
-    return SrcA, SrcB, cmd, Rd, Operand2
+    return SrcA, SrcB, cmd, Rd, Operand2, use_alu
 
     
 
