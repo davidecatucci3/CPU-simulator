@@ -56,19 +56,19 @@ def asm_to_bin(instr):
             cmd = '0100' if instr[0] == 'ADD' else '0010'
             s = '0'
 
-            Rn = bin(int(instr[2][1:])).zfill(4)
-            Rd = bin(int(instr[1][1:])).zfill(4)
-
+            Rn = bin(int(instr[2][1:]))[2:].zfill(4)
+            Rd = bin(int(instr[1][1:]))[2:].zfill(4)
+   
             # Src2
             if i == '0':
                 shamt5 = '00000'
                 sh = '00'
-                Rm = bin(int(instr[3][1:])).zfill(4)
+                Rm = bin(int(instr[3][1:]))[2:].zfill(4)
 
                 list_instr = [cond, op, i, cmd, s, Rn, Rd, shamt5, sh, '0', Rm]
             else:
                 rot = '0'.zfill(4)
-                imm8 = bin(int(instr[3])).zfill(8)
+                imm8 = bin(int(instr[3]))[2:].zfill(8)
 
                 list_instr = [cond, op, i, cmd, s, Rn, Rd, rot, imm8]
         else:
@@ -87,18 +87,18 @@ def asm_to_bin(instr):
         w = '0'
         l = '0'
  
-        Rn = bin(int(instr[2][2:])).zfill(4)
-        Rd = bin(int(instr[1][1:])).zfill(4)
+        Rn = bin(int(instr[2][2:]))[2:].zfill(4)
+        Rd = bin(int(instr[1][1:]))[2:].zfill(4)
 
         # Src2
         if i == '0':
-            imm12 = bin(int(instr[3][:-1])).zfill(12)
+            imm12 = bin(int(instr[3][:-1]))[2:].zfill(12)
 
             list_instr = [cond, op, i, p, u, b, w, l, Rn, Rd, imm12]
         else:
             shamt5 = '00000'
             sh = '00'
-            Rm = bin(int(instr[3][1:-1])).zfill(4)
+            Rm = bin(int(instr[3][1:-1]))[2:].zfill(4)
 
             list_instr = [cond, op, i, p, u, b, w, l, Rn, Rd, shamt5, sh, '1', Rm]
     elif instr[0] == 'MOV':
@@ -109,17 +109,17 @@ def asm_to_bin(instr):
         i = '0' if instr[2][0] == 'r' else '1'
 
         if i == '0':
-            Rd = bin(int(instr[1][1:])).zfill(4)
-            Operand2 = bin(int(instr[2][1:])).zfill(4)
+            Rd = bin(int(instr[1][1:]))[2:].zfill(4)
+            Operand2 = bin(int(instr[2][1:]))[2:].zfill(4)
 
             imm16 = bin(0).zfill(16)
 
             list_instr = [cond, op, i, Rd, Operand2, imm16]
         else:
-            Rd = bin(int(instr[1][1:])).zfill(4)
-            Operand2 = bin(int(instr[2])).zfill(4)
+            Rd = bin(int(instr[1][1:]))[2:].zfill(4)
+            Operand2 = bin(int(instr[2]))[2:].zfill(4)
 
-            imm16 = bin(0).zfill(16)
+            imm16 = bin(0)[2:].zfill(16)
 
             list_instr = [cond, op, i, Rd, Operand2, imm16]
     else:

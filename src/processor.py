@@ -36,46 +36,41 @@ def reset():
 # load instruction in memory
 load_instr()
 
-# execute instructions
-for i in range(0, 50):
-    # fetch
-    pc = config['Registers']['PC']
+def processor():
+    # execute instructions
+    for i in range(0, 50):
+        # fetch
+        pc = config['Registers']['PC']
 
-    instr = instruction_memory(pc)
+        instr = instruction_memory(pc)
+     
+        if instr == bin(0)[2:].zfill(word_lenght): # check if there is another instruction in memory 
+            break
 
-    if instr == '000000000000000000000000000000': # check if there is another instruction in memory 
-        break
+        print(f'Cycle {i + 1}')
 
-    print(f'Cycle {i + 1}')
+        new_pc = '0x' + struct.pack('>I', i + 1).hex().zfill(register_lenght)
 
-    new_pc = '0x' + struct.pack('>I', i + 1).hex().zfill(register_lenght)
+        config.set('Registers', 'PC', new_pc)
 
-    config.set('Registers', 'PC', new_pc)
+        with open('src/config.ini', 'w') as config_file:
+            config.write(config_file)
 
-    with open('src/config.ini', 'w') as config_file:
-        config.write(config_file)
+        # decode
+        SrcA, SrcB, cmd, Rd, Operand2 = register_file(instr)
 
-    # decode
-    SrcA, SrcB, cmd, Rd, Operand2 = register_file(instr)
-  
-    # send data to control unit
-    #cond = instr[0]
-    #op = instr[1]
-    #funct = instr[2:5] if instr[1] == '00' else instr[2:8]
-    #Rd = instr[6] if instr[1] == '00' else instr[9]
+        # execute
+        if SrcA != None and SrcB != None:
+            alu_res = ALU(SrcA, SrcB, cmd)
+        else:
+            alu_res = Operand2
 
-    #control_unit(cond, op, funct, Rd)
-
-    # execute
-    if SrcA != None and SrcB != None:
-        alu_res = ALU(SrcA, SrcB, cmd)
-    else:
-        alu_res = Operand2
-
-    # memory
-    write_data(alu_res)
-    print(alu_res, Rd)
-    # write back
-    write_back(alu_res, Rd)
+        # memory
+        write_data(alu_res)
     
-    time.sleep(2)
+        # write back
+        write_back(alu_res, Rd)
+        
+        time.sleep(2)
+
+processor()

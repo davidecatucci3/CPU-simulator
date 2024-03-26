@@ -8,32 +8,29 @@ config.read('src/config.ini')
 
 # global variables
 word_lenght = int(config['CPU settings']['word_lenght'])
-
 registers = config['Registers']
 
+# register file
 def register_file(instr):
     SrcA = None
     SrcB = None
 
     op = instr[1]
 
-    if op == '00':
+    if op == '00': # ADD or SUB
         cmd = instr[3]
 
         Operand2 = None
 
-        idx_Rn = instr[5].index('b')
-        Rn = int(instr[5][idx_Rn + 1:], 2)
+        Rn = int(instr[5], 2)
         SrcA = int(registers[f'r{Rn}'], 16)           
 
         i = instr[2]
 
-        idx_SrcB = instr[-1].index('b')
-        SrcB = int(registers[f'r{int(instr[-1][idx_SrcB + 1:], 2)}'], 16) if i == '0' else int(instr[-1][idx_SrcB + 1:], 2)
+        SrcB = int(registers[f'r{int(instr[-1], 2)}'], 16) if i == '0' else int(instr[-1], 2)
 
-        idx_Rd = instr[6].index('b')
-        Rd = f'r{int(instr[6][idx_Rd + 1:], 2)}'
-    elif op == '01':
+        Rd = f'r{int(instr[6], 2)}'
+    elif op == '01': # LDR or STR
         i = instr[2]
 
         Operand2 = None
@@ -41,53 +38,43 @@ def register_file(instr):
         cmd = '0100'
 
         if i == '0':
-            idx_Rn = instr[8].index('b')
-            Rn = int(instr[8][idx_Rn + 1:], 2)
+            Rn = int(instr[8], 2)
 
             SrcA = int(registers[f'r{Rn}'], 16)       
 
-            idx_Rm = instr[-1].index('b')
-            Rm = int(instr[-1][idx_Rm + 1:], 2)
-
+            Rm = int(instr[-1], 2)
             SrcB = Rm
 
-            idx_Rd = instr[9].index('b')
-            Rd = f'r{int(instr[9][idx_Rd + 1:], 2)}'
-        else:
-            idx_Rn = instr[8].index('b')
-            Rn = int(instr[8][idx_Rn + 1:], 2)
+            Rd = f'r{int(instr[9], 2)}'
+        else: 
+            Rn = int(instr[8], 2)
    
             SrcA = int(registers[f'r{Rn}'], 16)       
 
-            idx_Rm = instr[-1].index('b')
-            Rm = int(instr[-1][idx_Rm + 1:], 2)
+            Rm = int(instr[-1], 2)
    
             SrcB = int(registers[f'r{Rm}'], 16)       
 
-            idx_Rd = instr[9].index('b')
-            Rd = f'r{int(instr[9][idx_Rd + 1:], 2)}'
-    elif op == '10':
+            Rd = f'r{int(instr[9], 2)}'
+    elif op == '10': # MOV
         i = instr[2]
+
         cmd = None
         SrcA = None
         SrcB = None
 
         if i == '0':
-            idx_Rd = instr[3].index('b')
-            Rd = f'r{int(instr[3][idx_Rd + 1:], 2)}'
+            Rd = f'r{int(instr[3], 2)}'
 
-            idx_Operand2 = instr[4].index('b')
-            Operand2 = f'{int(instr[4][idx_Operand2 + 1:], 2)}'
+            Operand2 = f'{int(instr[4], 2)}'
 
             Operand2 = registers[f'r{Operand2}']
         else:
-            idx_Rd = instr[3].index('b')
-            Rd = f'r{int(instr[3][idx_Rd + 1:], 2)}'
+            Rd = f'r{int(instr[3], 2)}'
 
-            idx_Operand2 = instr[4].index('b')
-            Operand2 = int(instr[4][idx_Operand2 + 1:], 2)
+            Operand2 = int(instr[4], 2)
             Operand2 = '0x' + struct.pack('>I', Operand2).hex().zfill(8)
-    else:
+    else: # wrong op
         print('Error: OpCode not recognize')
 
     return SrcA, SrcB, cmd, Rd, Operand2
