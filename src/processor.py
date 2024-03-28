@@ -2,7 +2,7 @@ import configparser
 import struct
 import time
 
-from data_memory import load_instr, write_data, write_back, clear_memory
+from data_memory import load_instr, write_data, write_back, clear_memory, data_memory
 from instruction_memory import instruction_memory
 from register_file import register_file
 from control_unit import control_unit
@@ -43,8 +43,8 @@ def processor():
         pc = config['Registers']['PC']
 
         instr = instruction_memory(pc)
-     
-        if instr == bin(0)[2:].zfill(word_lenght): # check if there is another instruction in memory 
+   
+        if instr == hex(0).zfill(word_lenght)[:word_lenght - 2]: # check if there is another instruction in memory 
             break
 
         print(f'Cycle {i + 1}')
@@ -64,13 +64,18 @@ def processor():
             alu_res = ALU(SrcA, SrcB, cmd)
         else:
             alu_res = Operand2
-
+       
         # memory
-        write_data(alu_res)
+        MemWrite = False
+      
+        if MemWrite:
+            write_data(alu_res, Rd)
     
         # write back
-        write_back(alu_res, Rd)
+        if not MemWrite:
+            write_back(alu_res, Rd, True)
         
         time.sleep(2)
 
 processor()
+
