@@ -1,2 +1,5 @@
-def control_unit(cond, op, funct, Rd):
-    print(cond, op, funct, Rd)
+def control_unit(instr):
+    cond = instr[0]
+    op = instr[1]
+    funct = []
+    Rd = []

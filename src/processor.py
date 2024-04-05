@@ -59,6 +59,9 @@ def processor():
             config.write(config_file)
 
         instr = instruction_memory(pc)
+
+        # control unit
+        control_unit(instr)
     
         # decode
         SrcA, SrcB, cmd, Rd, Operand2, use_alu, MemWrite = register_file(instr)
