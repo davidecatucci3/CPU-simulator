@@ -13,7 +13,7 @@ register_lenght = int(config['CPU settings']['register_lenght'])
 size = 50 # units (not unit of measure)
 
 data_memory = {'0x' + struct.pack('>I', i).hex().zfill(register_lenght): hex(0).zfill(word_lenght)[:word_lenght - 2]  for i in range(size)} # memory stack
-
+data_memory['0x' + struct.pack('>I', 1).hex().zfill(register_lenght)] = '0x' + struct.pack('>I', 12).hex().zfill(register_lenght)
 c = 0
 sp = config['Registers']['SP']
 
@@ -33,15 +33,19 @@ def check_op_error(instr):
     return True
 
 # write res back in register
-def write_back(alu_res, Rd):
-    config.set('Registers', Rd, alu_res)
+def write_back(alu_res, Rd, from_mem=False):
+    val = str(alu_res) if not from_mem else data_memory[alu_res]
+
+    config.set('Registers', Rd, val)
 
     with open('src/config.ini', 'w') as config_file:
         config.write(config_file)
 
 # write res in memory
-def write_data(alu_res):
-    pass
+def write_data(alu_res, Rd):
+    val = config['Registers'][Rd]
+
+    data_memory[alu_res] = val
 
 # convert asm code in binary code
 def asm_to_bin(instr):
@@ -50,25 +54,25 @@ def asm_to_bin(instr):
         if check_op_error(instr):
             cond = '1110'
             op = '00'
-
+    
             # funct
             i = '0' if instr[3][0] == 'r' else '1'
             cmd = '0100' if instr[0] == 'ADD' else '0010'
             s = '0'
 
-            Rn = bin(int(instr[2][1:])).zfill(4)
-            Rd = bin(int(instr[1][1:])).zfill(4)
-
+            Rn = bin(int(instr[2][1:]))[2:].zfill(4)
+            Rd = bin(int(instr[1][1:]))[2:].zfill(4)
+   
             # Src2
             if i == '0':
                 shamt5 = '00000'
                 sh = '00'
-                Rm = bin(int(instr[3][1:])).zfill(4)
+                Rm = bin(int(instr[3][1:]))[2:].zfill(4)
 
                 list_instr = [cond, op, i, cmd, s, Rn, Rd, shamt5, sh, '0', Rm]
             else:
                 rot = '0'.zfill(4)
-                imm8 = bin(int(instr[3])).zfill(8)
+                imm8 = bin(int(instr[3]))[2:].zfill(8)
 
                 list_instr = [cond, op, i, cmd, s, Rn, Rd, rot, imm8]
         else:
@@ -87,20 +91,41 @@ def asm_to_bin(instr):
         w = '0'
         l = '0'
  
-        Rn = bin(int(instr[2][2:])).zfill(4)
-        Rd = bin(int(instr[1][1:])).zfill(4)
+        Rn = bin(int(instr[2][2:]))[2:].zfill(4)
+        Rd = bin(int(instr[1][1:]))[2:].zfill(4)
 
         # Src2
         if i == '0':
-            imm12 = bin(int(instr[3][:-1])).zfill(12)
+            imm12 = bin(int(instr[3][:-1]))[2:].zfill(12)
 
             list_instr = [cond, op, i, p, u, b, w, l, Rn, Rd, imm12]
         else:
             shamt5 = '00000'
             sh = '00'
-            Rm = bin(int(instr[3][1:-1])).zfill(4)
+            Rm = bin(int(instr[3][1:-1]))[2:].zfill(4)
 
             list_instr = [cond, op, i, p, u, b, w, l, Rn, Rd, shamt5, sh, '1', Rm]
+    elif instr[0] == 'MOV':
+        cond = '1110'
+        op = '10'
+
+        # funct
+        i = '0' if instr[2][0] == 'r' else '1'
+
+        if i == '0':
+            Rd = bin(int(instr[1][1:]))[2:].zfill(4)
+            Operand2 = bin(int(instr[2][1:]))[2:].zfill(4)
+
+            imm16 = bin(0).zfill(16)
+
+            list_instr = [cond, op, i, Rd, Operand2, imm16]
+        else:
+            Rd = bin(int(instr[1][1:]))[2:].zfill(4)
+            Operand2 = bin(int(instr[2]))[2:].zfill(4)
+
+            imm16 = bin(0)[2:].zfill(16)
+
+            list_instr = [cond, op, i, Rd, Operand2, imm16]
     else:
         print('Error: Instruction not recognized')
 

@@ -16,9 +16,13 @@ def ALU(SrcA, SrcB, cmd):
  
     if cmd == '0100':
         res = SrcA + SrcB
+
+        bin_res = '0x' + struct.pack('>I', res).hex().zfill(register_lenght)
     elif cmd == '0010':
         res = SrcA - SrcB
-   
-    bin_res ='0x' + struct.pack('>I', res).hex().zfill(register_lenght)
+
+        unsigned_res = res + (1 << register_lenght)
+
+        bin_res = '0x' + struct.pack('>I', unsigned_res).hex().zfill(register_lenght)
 
     return bin_res
