@@ -1,1 +1,0 @@
-print(bin(15)[2:].zfill(8))
