@@ -89,7 +89,7 @@ def asm_to_bin(instr):
         u = '0'
         b = '0'
         w = '0'
-        l = '0'
+        l = '0' if instr[0] == 'STR' else '1'
  
         Rn = bin(int(instr[2][2:]))[2:].zfill(4)
         Rd = bin(int(instr[1][1:]))[2:].zfill(4)

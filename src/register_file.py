@@ -17,6 +17,7 @@ def register_file(instr):
     cmd = None
     Operand2 = None
     use_alu = False
+    MemWrite = False
 
     op = instr[1]
 
@@ -30,7 +31,8 @@ def register_file(instr):
 
         i = instr[2]
 
-        SrcB = int(registers[f'r{int(instr[-1], 2)}'], 16) if i == '0' else int(instr[-1], 2)
+        Rm = int(instr[-1], 2)
+        SrcB = int(registers[f'r{Rm}'], 16) if i == '0' else Rm
 
         Rd = f'r{int(instr[6], 2)}'
     elif op == '01': # LDR or STR
@@ -39,6 +41,11 @@ def register_file(instr):
         i = instr[2]
 
         cmd = '0100'
+
+        l = instr[7]
+
+        if l == '0':
+            MemWrite = True
 
         if i == '0':
             Rn = int(instr[8], 2)
@@ -76,7 +83,7 @@ def register_file(instr):
     else: # wrong op
         print('Error: op not recognized')
 
-    return SrcA, SrcB, cmd, Rd, Operand2, use_alu
+    return SrcA, SrcB, cmd, Rd, Operand2, use_alu, MemWrite
 
     
 
