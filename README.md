@@ -18,3 +18,5 @@ The config.ini file contains all the other data
 - src/data_memory.py: contain the function that load the instruction in memory and the variable that represents the memory
 - src/instruction_memory.py: pc -> instruction_memory -> instruction 
 - src/processor.py: execute the 5 stages (fetch-decode-execute-memory-write back)
+
+## How to use it
