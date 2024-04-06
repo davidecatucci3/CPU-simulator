@@ -1,9 +1,7 @@
 def control_unit(instr):
     # instr datas
-    cond = instr[0]
     op = instr[1]
     funct = instr[2]
-    Rd = instr[4] if op in ['00', '01'] else instr[3]
 
     # controller variables
     RegWrite = False

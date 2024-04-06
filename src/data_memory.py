@@ -162,7 +162,7 @@ def load_instr():
     instrs = []
 
     # read asm code
-    with open('src/asm_code.txt') as f:
+    with open('src/asm code.txt') as f:
         code = f.readlines()
 
         for instr in code:

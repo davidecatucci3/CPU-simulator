@@ -68,17 +68,17 @@ def processor():
   
         # execute
         if ALUControl != None:
-            alu_res = ALU(SrcA, SrcB, ALUControl)
+            ALUResult = ALU(SrcA, SrcB, ALUControl)
         else:
-            alu_res = Operand2
+            ALUResult = Operand2
        
         # memory
         if MemWrite:
-            write_data(alu_res, Rd)
+            write_data(ALUResult, Rd)
     
         # write back
         if RegWrite:
-            write_back(alu_res, Rd, False)
+            write_back(ALUResult, Rd, False)
         
         time.sleep(2)
 
