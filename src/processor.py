@@ -61,14 +61,14 @@ def processor():
         instr = instruction_memory(pc)
 
         # control unit
-        control_unit(instr)
+        RegWrite, ALUControl, MemWrite = control_unit(instr)
     
         # decode
-        SrcA, SrcB, cmd, Rd, Operand2, use_alu, MemWrite = register_file(instr)
+        SrcA, SrcB, Rd, Operand2 = register_file(instr)
   
         # execute
-        if use_alu:
-            alu_res = ALU(SrcA, SrcB, cmd)
+        if ALUControl != None:
+            alu_res = ALU(SrcA, SrcB, ALUControl)
         else:
             alu_res = Operand2
        
@@ -77,7 +77,7 @@ def processor():
             write_data(alu_res, Rd)
     
         # write back
-        if not MemWrite:
+        if RegWrite:
             write_back(alu_res, Rd, False)
         
         time.sleep(2)

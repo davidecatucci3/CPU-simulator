@@ -14,41 +14,25 @@ registers = config['Registers']
 def register_file(instr):
     SrcA = None
     SrcB = None
-    cmd = None
     Operand2 = None
-    use_alu = False
-    MemWrite = False
 
     op = instr[1]
 
     if op == '00': # ADD or SUB
-        use_alu = True
-
-        cmd = instr[3]
-
         Rn = int(instr[5], 2)
         SrcA = int(registers[f'r{Rn}'], 16)           
 
-        i = instr[2]
+        i = instr[2][0]
 
         Rm = int(instr[-1], 2)
         SrcB = int(registers[f'r{Rm}'], 16) if i == '0' else Rm
 
         Rd = f'r{int(instr[6], 2)}'
     elif op == '01': # LDR or STR
-        use_alu = True
-
-        i = instr[2]
-
-        cmd = '0100'
-
-        l = instr[7]
-
-        if l == '0':
-            MemWrite = True
+        i = instr[2][0]
 
         if i == '0':
-            Rn = int(instr[8], 2)
+            Rn = int(instr[3], 2)
 
             SrcA = int(registers[f'r{Rn}'], 16)       
 
@@ -56,9 +40,9 @@ def register_file(instr):
 
             SrcB = Rm
 
-            Rd = f'r{int(instr[9], 2)}'
+            Rd = f'r{int(instr[4], 2)}'
         else: 
-            Rn = int(instr[8], 2)
+            Rn = int(instr[3], 2)
    
             SrcA = int(registers[f'r{Rn}'], 16)       
 
@@ -66,9 +50,9 @@ def register_file(instr):
    
             SrcB = int(registers[f'r{Rm}'], 16)       
 
-            Rd = f'r{int(instr[9], 2)}'
+            Rd = f'r{int(instr[4], 2)}'
     elif op == '10': # MOV
-        i = instr[2]
+        i = instr[2][0]
 
         if i == '0':
             Rd = f'r{int(instr[3], 2)}'
@@ -83,7 +67,7 @@ def register_file(instr):
     else: # wrong op
         print('Error: op not recognized')
 
-    return SrcA, SrcB, cmd, Rd, Operand2, use_alu, MemWrite
+    return SrcA, SrcB, Rd, Operand2
 
     
 

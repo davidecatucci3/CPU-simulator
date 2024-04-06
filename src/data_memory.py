@@ -60,6 +60,8 @@ def asm_to_bin(instr):
             cmd = '0100' if instr[0] == 'ADD' else '0010'
             s = '0'
 
+            funct = [i, cmd, s]
+
             Rn = bin(int(instr[2][1:]))[2:].zfill(4)
             Rd = bin(int(instr[1][1:]))[2:].zfill(4)
    
@@ -69,12 +71,12 @@ def asm_to_bin(instr):
                 sh = '00'
                 Rm = bin(int(instr[3][1:]))[2:].zfill(4)
 
-                list_instr = [cond, op, i, cmd, s, Rn, Rd, shamt5, sh, '0', Rm]
+                list_instr = [cond, op, funct, Rn, Rd, shamt5, sh, '0', Rm]
             else:
                 rot = '0'.zfill(4)
                 imm8 = bin(int(instr[3]))[2:].zfill(8)
 
-                list_instr = [cond, op, i, cmd, s, Rn, Rd, rot, imm8]
+                list_instr = [cond, op, funct, Rn, Rd, rot, imm8]
         else:
             print('Error: ASM (op) code is wrong')
 
@@ -90,6 +92,8 @@ def asm_to_bin(instr):
         b = '0'
         w = '0'
         l = '0' if instr[0] == 'STR' else '1'
+
+        funct = [i, p, u, b, w, l]
  
         Rn = bin(int(instr[2][2:]))[2:].zfill(4)
         Rd = bin(int(instr[1][1:]))[2:].zfill(4)
@@ -98,13 +102,13 @@ def asm_to_bin(instr):
         if i == '0':
             imm12 = bin(int(instr[3][:-1]))[2:].zfill(12)
 
-            list_instr = [cond, op, i, p, u, b, w, l, Rn, Rd, imm12]
+            list_instr = [cond, op, funct, Rn, Rd, imm12]
         else:
             shamt5 = '00000'
             sh = '00'
             Rm = bin(int(instr[3][1:-1]))[2:].zfill(4)
 
-            list_instr = [cond, op, i, p, u, b, w, l, Rn, Rd, shamt5, sh, '1', Rm]
+            list_instr = [cond, op, funct, Rn, Rd, shamt5, sh, '1', Rm]
     elif instr[0] == 'MOV':
         cond = '1110'
         op = '10'
@@ -112,20 +116,22 @@ def asm_to_bin(instr):
         # funct
         i = '0' if instr[2][0] == 'r' else '1'
 
+        funct = [i]
+
         if i == '0':
             Rd = bin(int(instr[1][1:]))[2:].zfill(4)
             Operand2 = bin(int(instr[2][1:]))[2:].zfill(4)
 
             imm16 = bin(0).zfill(16)
 
-            list_instr = [cond, op, i, Rd, Operand2, imm16]
+            list_instr = [cond, op, funct, Rd, Operand2, imm16]
         else:
             Rd = bin(int(instr[1][1:]))[2:].zfill(4)
             Operand2 = bin(int(instr[2]))[2:].zfill(4)
 
             imm16 = bin(0)[2:].zfill(16)
 
-            list_instr = [cond, op, i, Rd, Operand2, imm16]
+            list_instr = [cond, op, funct, Rd, Operand2, imm16]
     else:
         print('Error: Instruction not recognized')
 
