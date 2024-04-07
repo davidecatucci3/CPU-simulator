@@ -39,18 +39,19 @@ load_instr()
 # execute instructions
 def processor(): 
     cycle_counter = 1
-    start = True
 
     # execute instructions
-    while start == True or instr != hex(0).zfill(word_lenght)[:word_lenght - 2]: # check if there is another instruction in memory
-        start = False
-
-        print(f'Cycle {cycle_counter}')
-
+    while True: 
         # fetch
         pc = config['Registers']['PC']
 
         instr = instruction_memory(pc)
+
+        # check if there an instruction to execute in memory
+        if instr != hex(0).zfill(word_lenght)[:word_lenght - 2]:
+            break
+
+        print(f'Cycle {cycle_counter}')
 
         # update pc
         new_pc = '0x' + struct.pack('>I', cycle_counter).hex().zfill(register_lenght) 
