@@ -2,7 +2,7 @@ import configparser
 import struct
 import time
 
-from data_memory import load_instr, write_data, write_back, clear_memory, data_memory
+from data_memory import load_instr, write_data, write_back, clear_memory
 from instruction_memory import instruction_memory
 from register_file import register_file
 from control_unit import control_unit
@@ -33,49 +33,57 @@ def reset():
     # clear data memory
     clear_memory()
 
-# load instruction in memory
+# load instructions in memory
 load_instr()
 
-def processor():
+# execute instructions
+def processor(): 
+    cycle_counter = 1
+
     # execute instructions
-    for i in range(0, 50):
+    while True: 
         # fetch
         pc = config['Registers']['PC']
 
         instr = instruction_memory(pc)
-   
-        if instr == hex(0).zfill(word_lenght)[:word_lenght - 2]: # check if there is another instruction in memory 
+
+        # check if there an instruction to execute in memory
+        if instr != hex(0).zfill(word_lenght)[:word_lenght - 2]:
             break
 
-        print(f'Cycle {i + 1}')
+        print(f'Cycle {cycle_counter}')
 
-        new_pc = '0x' + struct.pack('>I', i + 1).hex().zfill(register_lenght)
+        # update pc
+        new_pc = '0x' + struct.pack('>I', cycle_counter).hex().zfill(register_lenght) 
 
-        config.set('Registers', 'PC', new_pc)
-
+        config.set('Registers', 'pc', new_pc)
+   
         with open('src/config.ini', 'w') as config_file:
             config.write(config_file)
 
+        # control unit
+        RegWrite, ALUControl, MemWrite = control_unit(instr)
+    
         # decode
-        SrcA, SrcB, cmd, Rd, Operand2, use_alu = register_file(instr)
-
+        SrcA, SrcB, Rd, Operand2 = register_file(instr)
+  
         # execute
-        if use_alu:
-            alu_res = ALU(SrcA, SrcB, cmd)
+        if ALUControl != None:
+            ALUResult = ALU(SrcA, SrcB, ALUControl)
         else:
-            alu_res = Operand2
+            ALUResult = Operand2
        
         # memory
-        MemWrite = False
-      
         if MemWrite:
-            write_data(alu_res, Rd)
+            write_data(ALUResult, Rd)
     
         # write back
-        if not MemWrite:
-            write_back(alu_res, Rd, True)
+        if RegWrite:
+            write_back(ALUResult, Rd)
         
         time.sleep(2)
+
+        cycle_counter += 1 
 
 processor()
 
