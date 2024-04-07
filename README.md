@@ -14,9 +14,11 @@ The config.ini file contains all the other data
 - src/building_blocks.py: the most important logic circuits (ALU, mux, ...)
 - src/config.ini: CPU configuration (with all the important data)
 - control_unit.py: controller that according to the instruction decide if some global variable are True or False
-- src/CPU.py: file that connect all the different main files (data_memory.py, processor.py, instruction_memory.py and control_unit.py)
 - src/data_memory.py: contain the function that load the instruction in memory and the variable that represents the memory
 - src/instruction_memory.py: pc -> instruction_memory -> instruction 
 - src/processor.py: execute the 5 stages (fetch-decode-execute-memory-write back)
+- src/register_file.py: decode the instruction to be executed
 
 ## How to use it
+First you have to write your asm instructions in the src/asm\code.txt, after you can go in the config.ini file
+to configure the settings of the processor and at the end run the src/processor.py file
