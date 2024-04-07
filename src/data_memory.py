@@ -33,9 +33,9 @@ def check_op_error(instr):
     return True
 
 # write res back in register
-def write_back(alu_res, Rd, from_mem=False):
-    val = str(alu_res) if not from_mem else data_memory[alu_res]
-
+def write_back(alu_res, Rd):
+    val = data_memory[alu_res]
+ 
     config.set('Registers', Rd, val)
 
     with open('src/config.ini', 'w') as config_file:

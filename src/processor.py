@@ -2,7 +2,7 @@ import configparser
 import struct
 import time
 
-from data_memory import load_instr, write_data, write_back, clear_memory, data_memory
+from data_memory import load_instr, write_data, write_back, clear_memory
 from instruction_memory import instruction_memory
 from register_file import register_file
 from control_unit import control_unit
@@ -78,7 +78,7 @@ def processor():
     
         # write back
         if RegWrite:
-            write_back(ALUResult, Rd, False)
+            write_back(ALUResult, Rd)
         
         time.sleep(2)
 
