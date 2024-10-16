@@ -19,5 +19,5 @@ The config.ini file contains all the other data
 - src/register_file.py: decode the instruction to be executed
 
 ## How to use it
-First you have to write your asm instructions in the src\asm\code.txt, after you can go in the config.ini file
+First you have to write your asm instructions in the src/asm/code.txt, after you can go in the config.ini file
 to configure the settings of the processor and at the end run the src/processor.py file
