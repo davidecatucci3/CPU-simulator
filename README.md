@@ -1,5 +1,5 @@
 # CPU Simulator
-Simulation of a single-cycle CPU, able to understand only four ARM instructions: ADD, SUB, LDR, STR and MOV
+Simulation of a single-cycle CPU, able to understand only five ARM instructions: ADD, SUB, LDR, STR and MOV
 
 ## CPU Configuration
 - word lenght: 32bit
